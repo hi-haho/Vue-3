@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script src="https://unpkg.com/vue@3"></script>
+  <body>
+    컴포넌트 사용 범위<br />
+    전역 컴포넌트 : 여러 컴포넌트에서 유효 <br />
+    지역 컴포넌트 : 특정 컴포넌트에서만 유효 <br />
+    <hr />
+    <div id="appBasic">
+      <hello></hello>
+      <!-- 1 번-->
+      <!-- hello component 사용-->
+    </div>
+    <script>
+      const { createApp } = Vue;
+      const appBasic = createApp({}); //첫번째 Vue application instance
+      // xxx.component('컴포넌트명',옵션)
+      appBasic.component("hello", {
+        //hello 컴포넌트를 전역으로 선언
+        template: "<h1>{{title}}</h1>", //컴포넌트의 템플릿(html,css등의 마크업)을 정의 //2번
+        data() {
+          return {
+            title: "안녕하세요", //3번 해당 값이 들어간다.컴포넌트의 local data를 정의
+          };
+        },
+      });
+      appBasic.mount("#appBasic");
+    </script>
+
+    <div id="appBasic2">
+      <world style="color: blueviolet"></world>
+      <world style="color: rgb(52, 108, 211)"></world>
+    </div>
+    <script>
+      const appBasic2 = createApp({});
+      appBasic2.component("world", {
+        template:
+          '<h1>{{title}}</h1> <button @click="changeTitle">클릭</button>',
+        //컴포넌트 템플릿과 이벤트 포함
+        data() {
+          return {
+            title: "메롱 🙈", //로컬데이터
+          };
+        },
+        methods: {
+          changeTitle() {
+            this.title = "변경했지롱🙉"; //버튼별로 this.title 수행
+          },
+        },
+      });
+      appBasic2.mount("#appBasic2");
+    </script>
+
+    <hr color="red" size="10px" />
+
+    <div id="app">
+      <div>컴포넌트 등록1</div>
+      <my-gloval-component></my-gloval-component>
+      <my-local-component></my-local-component>
+    </div>
+    <div id="app2">
+      <div>컴포넌트 등록2</div>
+      <my-gloval-component></my-gloval-component>
+      <my-local-component></my-local-component>
+    </div>
+    <div id="app3">
+      <div>컴포넌트 등록3</div>
+      <my-gloval-component></my-gloval-component>
+      <my-local-component></my-local-component>
+    </div>
+    <script>
+      //전역 컴포넌트를 등록하는 공용 컴포넌트를 정의
+      const myGlobalComponent = {
+        template: "<b>전역 컴포넌트가 등록</b>",
+      };
+      const app = Vue.createApp({
+        components: {
+          "my-gloval-component": myGlobalComponent, //전역 컴포넌트 등록
+          "my-local-component": {
+            template: "<br><i>지역 컴포넌트가 등록1</i></br>",
+          },
+        },
+      });
+      app.mount("#app");
+
+      const app2 = Vue.createApp({
+        components: {
+          "my-gloval-component": myGlobalComponent, //전역 컴포넌트 등록
+          "my-local-component": {
+            template: "<br><i>지역 컴포넌트2 : 달라졌지롱</i></br>",
+          },
+        },
+      });
+      app2.mount("#app2");
+
+      const app3 = Vue.createApp({
+        components: {
+          "my-gloval-component": myGlobalComponent, //전역 컴포넌트 등록
+          "my-local-component": {
+            template: "<br><i>지역 컴포넌트: 지역만 다르지?!🐪</i></br>",
+          },
+        },
+      });
+      app3.mount("#app3");
+    </script>
+  </body>
+</html>

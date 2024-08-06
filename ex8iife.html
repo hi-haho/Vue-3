@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>👾👾</title>
+    <script src="https://unpkg.com/vue@3"></script>
+  </head>
+  <body>
+    <!-- 첫번째 인스턴스 -->
+    <div id="app">
+      {{key}}{{key2}}
+      <br />
+      <b>{{message}}</b><br />
+      <input type="text" v-model="message" />
+      <!-- v-model은 데이터 양방향 -->
+      <div v-html="htmlString"></div>
+      <!-- {{}}이건 innerText-->
+      <div>{{htmlString}}</div>
+
+      <!-- 이벤트 리스너를 이용해 메소드 호출 -->
+      <button @click="myFunc">클릭</button>
+      <button @click="myChange1">변경1</button>
+      <button @click="myChange2">변경2</button>
+      <br />
+      <!-- 두 수 더하기 -->
+      <input type="text" size="5" v-model.number="su1" /> +
+      <input type="text" size="5" v-model.number="su2" /> =
+      <span> {{ su1 + su2 }}</span>
+      <br />
+      <img v-bind:src="naverlogo" style="width: 100px; height: auto" />
+    </div>
+
+    <br /><br />
+    <hr />
+    <!-- 두번째 인스턴스 -->
+    <!-- Uncaught SyntaxError: Identifier 'createApp' has already been declared (at  -->
+    <!-- create를 반복해서 생기는 문제 -->
+    <!-- 위 문제 해결 방법 : IIFE로 Vue 인스턴스를 감싸주면 식별자 충돌문제를 해결할 수 있다. -->
+    <div id="app2">
+      <select>
+        <option
+          :value="buser.bunho"
+          v-for="(buser, index) in busers"
+          :key="index"
+        >
+          {{buser.irum}} {{buser.junhwa}}
+        </option>
+      </select>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>부서번호</th>
+            <th>부서명</th>
+            <th>번화</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(buser, index) in busers" :key="index">
+            <td>{{buser.bunho}}</td>
+            <td>{{buser.irum}}</td>
+            <td>{{buser.junhwa}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <span :style="cssStyleTest"> 컨텐츠 스타일 바인딩</span>
+      <button @click="cssStyleTest.fontSize='30px'">글자 크기 확대</button>
+      <br />
+    </div>
+
+    <br /><br />
+    <hr />
+
+    <!-- 세번째 인스턴스 -->
+    <div id="app3event"></div>
+
+    <!-- 각 뷰 인스턴스를 js 파일로 작성 후 연결 -->
+    <script src="ex8js1.js"></script>
+    <script src="ex8js2.js"></script>
+    <script src="ex8js3.js"></script>
+  </body>
+</html>

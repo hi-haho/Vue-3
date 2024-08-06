@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🏠🏠🏠</title>
+    <script src="https://unpkg.com/vue@3"></script>
+  </head>
+  <body>
+    🔹빌트인 디렉티브 : html 태그 안에 들어가는 속성 역할을 하며 v-라는 접두어가
+    붙는다.
+    <br />
+    🔹디렉티브는 DOM 엘리먼트가 뭔가를 수행하도록 지시하는 특수한 토큰
+
+    <div id="app">
+      💀<a href="{{link}}"> 페이지 이동 (에러) </a><br />
+      😀<a v-bind:href="link"> 페이지 이동! </a><br />
+      😀<a :href="link"> 페이지 이동! </a><br />
+      <img v-bind:src="imageSrc" alt="동적이미지" /><br />
+      <h2 v-text="say"></h2>
+      <h2>data 속성값1 : {{say}}</h2>
+      <h3>함수 호출 결과 : {{sayFunc()}}</h3>
+
+      <!-- 단방향 데이터 흐름-->
+      <span v-text="aLinkNaver">문자열 그데로 출력(inserText)</span><br />
+      <span v-html="aLinkNaver">문자열 그데로 출력(inserText)</span><br />
+
+      <!-- 양방향 데이터 흐름 v-model = v-bind + v-on-->
+      이름은 <input type="text" v-model="name" /> {{name}}<br />
+      이름은
+      <!--<input type="text" v-bind:value="name" v-on:input="changeName" />-->
+      <input type="text" :value="name" @input="changeName" />
+      {{name}}<br />
+
+      <hr />
+      <!-- 계산된 프로퍼티 관련 -->
+      a = {{a}} / b = {{b}} <br />
+      a값 입력 <input type="text" v-model="a" />
+      <br />
+      입력된 a : {{a}} (타입 : {{typeof a}})
+      <br />
+      a값 입력 : <input type="text" v-model.number="a" />
+      <!-- 형변환 v-model.number-->
+      <br />
+      입력된 a : {{a}} (타입 : {{typeof a}})
+
+      <hr />
+      제어문 : 조건판단문 반복문 <br />
+      v-if: 표현식의 truthy 값을 기반으로 엘리먼트 또는 템플릿 일부를 조건부로
+      렌더링. v-for와 함께 사용하는 경우, v-if의 우선 순위가 높습니다.
+
+      <h2 v-if="nai>20">나이가 20 초과 💚</h2>
+      <h2 v-else-if="nai === 20">나이가 20살이넹 💜</h2>
+      <h2 v-else>나이가 20 미만 💛</h2>
+
+      <hr />
+      제어문 : 반복문 for <br />
+      <h3>오늘 할 일</h3>
+      <ol>
+        <li v-for="(todo,index) in todos" :key="index">{{todo.msg}}</li>
+      </ol>
+      <ul>
+        <!-- 배열 출력시 index(key)값 부여하기(권장) - index는 0부터 시작 -->
+        <li v-for="(todo,index) in todos" :key="index">
+          {{index+1}}) {{todo.msg}}
+        </li>
+      </ul>
+    </div>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            link: "https://cafe.daum.net/flowlife",
+            imageSrc: "google.png",
+            say: "안녕",
+            aLinkNaver: '<a href="https://naver.com">🦖네이버</a>',
+            name: "짱구",
+            a: "1",
+            nai: 23,
+            todos: [
+              { msg: "아침먹고" },
+              { msg: "땡" },
+              { msg: "저녁먹고" },
+              { msg: "땡" },
+            ],
+          };
+        },
+        methods: {
+          sayFunc() {
+            this.say = "너무 더운데 비도와";
+            return this.say;
+          },
+          changeName(e) {
+            this.name = e.target.value;
+          },
+        },
+        computed: {
+          //computed properties
+          // 함수처럼 작동. 차이는 계산된 프로퍼티가 의존하는 요소가 변경되면 반응
+          b() {
+            return Number(this.a) + 1;
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
