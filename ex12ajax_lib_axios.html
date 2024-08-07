@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🙉</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div class="gtranslate_wrapper">
+      <script>
+        window.gtranslateSettings = {
+          default_language: "ko",
+          detect_browser_language: true,
+          languages: ["es", "de", "th", "mn", "ar", "ko", "en", "ja", "zh-CN"],
+          wrapper_selector: ".gtranslate_wrapper",
+          flag_size: 24,
+          horizontal_position: "right",
+          vertical_position: "top",
+        };
+      </script>
+      <script
+        src="https://cdn.gtranslate.net/widgets/latest/flags.js"
+        defer
+      ></script>
+    </div>
+    <div id="app">
+      <button @click="fetchData">Ajax로 도서관 정보 읽기</button>
+      <button @click="clearData">Ajax로 도서관 정보 지우기</button>
+      <div v-for="(lib, index) in libraries" :key="index">
+        <h3>{{ lib.LBRRY_NAME }}</h3>
+        <h4>{{ lib.FDRM_CLOSE_DATE }}</h4>
+        <b>{{ lib.TEL_NO }}</b>
+        <hr />
+      </div>
+    </div>
+    <script>
+      const { createApp } = Vue;
+      createApp({
+        data() {
+          return {
+            libraries: [],
+          };
+        },
+        methods: {
+          fetchData() {
+            axios
+              .get(
+                "https://raw.githubusercontent.com/pykwon/python/master/seoullibtime5.json"
+              )
+              .then((response) => {
+                if (!response.ok) {
+                  this.libraries = response.data.SeoulLibraryTime.row;
+                  //   throw new Error("Ajax error: " + response.statusText);
+                }
+              })
+              .catch((error) => {
+                console.log("읽기 오류 : ", error);
+              });
+          },
+          clearData() {
+            this.libraries = [];
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

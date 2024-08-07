@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>👻</title>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      let datas = [
+        ["일본", 3],
+        ["대만", 7],
+        ["몽골", 3],
+        ["페루", 4],
+        ["미국", 3],
+      ];
+
+      function drawFunc() {
+        let data = google.visualization.arrayToDataTable([
+          ["여행", "원하는 정도"],
+          ...datas,
+        ]);
+        let options = { title: "가고 싶은 여행지", is3D: true };
+        let chart = new google.visualization.PieChart(
+          document.querySelector("#chart_div")
+        );
+        chart.draw(data, options);
+      }
+
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawFunc);
+
+      window.updateChart = function () {
+        drawFunc();
+      };
+    </script>
+  </head>
+  <body>
+    <h2>구글 차트(원 그래프)그리기</h2>
+    여행지 선택<br />
+    <div id="chart_div" style="height: 500px"></div>
+    <div id="app">
+      <ul>
+        <li v-for="(value, index) in dataArray" :key="index">
+          {{ value[0] }}: {{ value[1] }}
+          <button @click="addOneFunc(index)">+ 1</button>
+          <button @click="subOneFunc(index)">- 1</button>
+        </li>
+      </ul>
+    </div>
+    <script>
+      const { createApp } = Vue;
+      createApp({
+        data() {
+          return {
+            dataArray: datas,
+          };
+        },
+        methods: {
+          addOneFunc(index) {
+            this.dataArray[index][1]++;
+            this.updateChart();
+          },
+          subOneFunc(index) {
+            if (this.dataArray[index][1] > 0) {
+              this.dataArray[index][1]--;
+              this.updateChart();
+            }
+          },
+          updateChart() {
+            drawFunc();
+            //window.updateChart();
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

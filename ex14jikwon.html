@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jikwon</title>
+    <script src="https://unpkg.com/vue@3"></script>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="showFunc">직원 정보</button>
+      <table v-if="jikdatas.length > 0">
+        <thead>
+          <tr>
+            <th>사번</th>
+            <th>이름</th>
+            <th>부서이름</th>
+            <th>직급</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(jik, index) in jikdatas" :key="index">
+            <td>{{jik.jikwon_no}}</td>
+            <td>{{jik.jikwon_name}}</td>
+            <td>{{jik.buser_name}}</td>
+            <td>{{jik.jikwon_jik}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return { jikdatas: [] };
+        },
+        methods: {
+          showFunc() {
+            fetch("http://localhost:8080/Jikwon/jikwonJson.jsp")
+              .then((response) => {
+                if (response.ok) {
+                  return response.json();
+                }
+                throw new Error("Ajax error: " + response.statusText);
+              })
+              .then((data) => {
+                console.log("자료 ", data);
+                this.jikdatas = data.jikwon;
+              })
+              .catch((error) => {
+                console.log("직원 자료 읽기 오류 : ", error);
+              });
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
